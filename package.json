@@ -1,0 +1,56 @@
+{
+  "name": "@thinkdeep/apollo-datasource-neo4j",
+  "version": "0.0.1-alpha.0",
+  "description": "Neo4j data source for apollo graphql.",
+  "main": "src/index.js",
+  "repository": "git@github.com:ThinkDeepTech/apollo-datasource-neo4j.git",
+  "author": "haydenmcp <hayden.mcparlane@gmail.com>",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "scripts": {
+    "setup": "npm run clean && npm install",
+    "clean": "rm -rf ./node_modules",
+    "lint": "eslint --fix ./**/*.js",
+    "tests": "c8 --clean mocha ./test/**/*.test.js ./test/*.test.js",
+    "tests:coverage:publish": "npm run tests && cat ./coverage/lcov.info | coveralls"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run tests"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "./node_modules/.bin/eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "apollo-datasource": "^3.3.2",
+    "neo4j-driver": "^4.4.6"
+  },
+  "devDependencies": {
+    "c8": "^7.11.3",
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
+    "coveralls": "^3.1.1",
+    "eslint": "^8.14.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "husky": "^1.1.2",
+    "lint-staged": "^12.4.1",
+    "mocha": "^9.1.3",
+    "prettier": "^2.2.1",
+    "sinon": "^12.0.1",
+    "sinon-chai": "^3.7.0"
+  },
+  "keywords": [
+    "Node",
+    "JavaScript",
+    "ApolloDataSource",
+    "ApolloGraphQL"
+  ]
+}
