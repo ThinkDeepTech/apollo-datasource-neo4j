@@ -55,7 +55,7 @@ class Neo4jDataSource extends DataSource {
       accessMode: this.context.defaultAccessMode || neo4j.session.READ,
     }
   ) {
-    const session = (await this.driver).session({
+    const session = this.driver.session({
       database: options.database,
       defaultAccessMode: options.accessMode,
     });
