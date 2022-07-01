@@ -55,6 +55,8 @@ class Neo4jDataSource extends DataSource {
       accessMode: this.context.defaultAccessMode || neo4j.session.READ,
     }
   ) {
+    await this.driver.verifyConnectivity();
+
     const session = this.driver.session({
       database: options.database,
       defaultAccessMode: options.accessMode,
@@ -62,9 +64,9 @@ class Neo4jDataSource extends DataSource {
 
     let results = null;
     try {
-      results = await session.run(query, params);
+      results = session.run(query, params);
     } finally {
-      session.close();
+      await session.close();
     }
 
     return results;
