@@ -65,7 +65,7 @@ class Neo4jDataSource extends DataSource {
     try {
       results = await session.run(query, params);
     } catch (e) {
-      console.error(`Failed to run query\n${query}\n`);
+      console.error(`Failed to run query: ${e.message}\n${query}\n`);
       throw e;
     } finally {
       await session.close();
