@@ -1,6 +1,6 @@
 {
   "name": "@thinkdeep/apollo-datasource-neo4j",
-  "version": "0.0.1-alpha.5",
+  "version": "0.0.1-alpha.6",
   "description": "Neo4j data source for apollo graphql.",
   "main": "src/index.js",
   "repository": "git@github.com:ThinkDeepTech/apollo-datasource-neo4j.git",
