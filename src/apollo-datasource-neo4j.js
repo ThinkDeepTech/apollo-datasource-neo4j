@@ -44,22 +44,21 @@ class Neo4jDataSource extends DataSource {
    * Run a query against neo4j.
    * @param {String} query Neo4j query string.
    * @param {Object} params Variables to include in the query.
-   * @param {Object} options Query options.
+   * @param {Object} accessMode Access mode for query.
+   * @param {String} database Database against which query will be executed.
    * @return {Object} Result of the query or null;
    */
   async run(
     query,
     params,
-    options = {
-      database: this.context.defaultDatabase,
-      accessMode: this.context.defaultAccessMode || neo4j.session.READ,
-    }
+    accessMode = this.context.defaultAccessMode || neo4j.session.READ,
+    database = this.context.defaultDatabase || 'neo4j'
   ) {
-    await this.driver.verifyConnectivity();
+    await this._verifyConnectivity(this.driver);
 
     const session = this.driver.session({
-      database: options.database,
-      defaultAccessMode: options.accessMode,
+      database,
+      defaultAccessMode: accessMode,
     });
 
     let results = null;
@@ -73,6 +72,21 @@ class Neo4jDataSource extends DataSource {
   }
 
   /**
+   * Verify that a successfull connection was made with neo4j.
+   *
+   * @param {Object} driver Neo4j driver.
+   */
+  async _verifyConnectivity(driver) {
+    try {
+      await driver.verifyConnectivity();
+      console.debug(`Neo4j driver connected successfully.`);
+    } catch (e) {
+      console.error(`Neo4j driver failed to connect. ${e.message}`);
+      throw e;
+    }
+  }
+
+  /**
    * Get a neo4j driver.
    * @param {String} url Neo4j url.
    * @param {Object} authToken Auth object obtained from the drivers neo4j.auth.basic(...), etc.
@@ -83,6 +97,7 @@ class Neo4jDataSource extends DataSource {
       disableLosslessIntegers: true,
     });
     attachExitHandler(async () => {
+      console.debug(`Closing neo4j driver.`);
       await dvr.close();
     });
 
