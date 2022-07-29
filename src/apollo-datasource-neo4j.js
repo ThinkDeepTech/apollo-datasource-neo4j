@@ -1,6 +1,5 @@
 import {attachExitHandler} from '@thinkdeep/attach-exit-handler';
 import {DataSource} from 'apollo-datasource';
-import neo4j from 'neo4j-driver';
 
 /**
  * Apollo neo4j data source.
@@ -21,7 +20,7 @@ class Neo4jDataSource extends DataSource {
 
     this.context = context;
 
-    this.neo4j = neo4j;
+    this.neo4j = context.neo4j;
 
     const url = context.url;
     if (!url) {
@@ -51,7 +50,7 @@ class Neo4jDataSource extends DataSource {
   async run(
     query,
     params,
-    accessMode = this.context.defaultAccessMode || neo4j.session.READ,
+    accessMode = this.context.defaultAccessMode || this.neo4j.session.READ,
     database = this.context.defaultDatabase || 'neo4j'
   ) {
     await this._verifyConnectivity(this.driver);
@@ -96,7 +95,7 @@ class Neo4jDataSource extends DataSource {
    * @return {Object} Neo4j driver.
    */
   _driver(url, authToken) {
-    const dvr = neo4j.driver(url, authToken, {
+    const dvr = this.neo4j.driver(url, authToken, {
       disableLosslessIntegers: true,
     });
     attachExitHandler(async () => {
